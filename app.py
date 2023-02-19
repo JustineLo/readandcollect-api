@@ -18,34 +18,10 @@ cred = credentials.Certificate(firebase_credentials)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-usersdb = db.collection('users').document('nSrEazHXrHfCwwjDPVnD').collection('articles')
-articles = usersdb.document('articles')
-
-@app.route("/users", methods=["GET"])
-def get_users():
-    users = [doc.to_dict() for doc in usersdb.stream()]
-    return jsonify(users)
-
-
-@app.route('/create_user', methods=['POST'])
-def create_user():
-    # define the new user data
-    new_user_data = {
-        'displayName': 'John Doe',
-        'email': 'john.doe@example.com',
-    }
-
-    # add new user to Firestore
-    doc_ref = db.collection('users').document()
-    doc_ref.set(new_user_data)
-
-    return jsonify({'message': 'User created successfully!'}), 201
-
-
 @app.route('/add_article', methods=['POST'])
 def add_article():
 
-    user_id = 'FDaCwLrkwfu3xxeox1qn'
+    user_id = request.json.get("uid")
     url = request.json.get("url")
 
     headers = {
