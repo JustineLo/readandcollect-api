@@ -21,8 +21,12 @@ db = firestore.client()
 @app.route('/add_article', methods=['POST'])
 def add_article():
 
-    user_id = request.json.get("uid")
+    user_uid = request.json.get("uid")
     url = request.json.get("url")
+    user_docs = db.collection('users').where('uid', '==', user_uid).get()
+    if len(user_docs) == 0:
+        return jsonify({'error': 'User not found.'}), 404
+    user_doc_id = user_docs[0].id
 
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
@@ -54,7 +58,7 @@ def add_article():
         'zContent': text
     }
 
-    doc_ref = db.collection('users').document(user_id).collection('articles').document()
+    doc_ref = db.collection('users').document(user_doc_id).collection('articles').document()
     doc_ref.set(new_article)
 
     # return the response from the create_user endpoint
