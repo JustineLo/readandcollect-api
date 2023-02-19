@@ -1,13 +1,11 @@
 import os
-from datetime import datetime
-import time
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import firebase_admin
 from firebase_admin import credentials, firestore
-import requests
+import json
 
 from utils import get_html, sanitize, select_content
 
@@ -15,12 +13,10 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize Firestore DB
+firebase_credentials = json.loads(os.environ['FIREBASE_CREDENTIALS'])
 cred = credentials.Certificate('key.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
-urlsDB = db.collection('urls')
-articlesDB = db.collection('articles')
-adminDB = db.collection('admin')
 
 usersdb = db.collection('users').document('nSrEazHXrHfCwwjDPVnD').collection('articles')
 articles = usersdb.document('articles')
