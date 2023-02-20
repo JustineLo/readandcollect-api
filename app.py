@@ -62,7 +62,7 @@ def add_article():
     doc_ref.set(new_article)
 
     # return the response from the create_user endpoint
-    return jsonify({'message': 'Article added successfully!'}), 201
+    return jsonify({'newArticle': new_article})
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
