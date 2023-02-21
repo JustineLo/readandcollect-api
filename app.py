@@ -55,7 +55,7 @@ def add_article():
     new_article = {
         'title': title,
         'url': url,
-        'createdAt': firestore.SERVER_TIMESTAMP,
+        'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'zContent': text
     }
 
@@ -63,12 +63,7 @@ def add_article():
     doc_ref.set(new_article)
 
     # return the response from the create_user endpoint
-    return jsonify({
-        'title': title,
-        'url': url,
-        'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'zContent': text
-    }), 201
+    return jsonify(new_article), 201
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
