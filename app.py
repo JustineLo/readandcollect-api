@@ -28,8 +28,6 @@ def add_article():
         return jsonify({'error': 'User not found.'}), 404
     user_doc_id = user_docs[0].id
 
-    print(user_uid, url, user_doc_id)
-
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
     }
@@ -64,7 +62,7 @@ def add_article():
     doc_ref.set(new_article)
 
     # return the response from the create_user endpoint
-    return jsonify({'message': 'Article added successfully!'}), 201
+    return jsonify({'newArticle': new_article})
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
