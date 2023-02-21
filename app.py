@@ -28,6 +28,8 @@ def add_article():
         return jsonify({'error': 'User not found.'}), 404
     user_doc_id = user_docs[0].id
 
+    print(user_uid, url, user_doc_id)
+
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
     }
