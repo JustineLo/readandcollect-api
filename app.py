@@ -22,9 +22,9 @@ db = firestore.client()
 @app.route('/add_article', methods=['POST'])
 def add_article():
 
-    user_uid = request.json.get("uid")
+    userDocID = request.json.get("userDocID")
     url = request.json.get("url")
-    user_docs = db.collection('users').where('uid', '==', user_uid).get()
+    user_docs = db.collection('users').where('uid', '==', userDocID).get()
     if len(user_docs) == 0:
         return jsonify({'error': 'User not found.'}), 404
     user_doc_id = user_docs[0].id
