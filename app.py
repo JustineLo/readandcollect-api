@@ -43,7 +43,8 @@ def add_article():
         'title': title,
         'url': url,
         'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'zContent': text
+        'zContent': text,
+        'highlights': []
     }
 
     doc_ref = db.collection('users').document(userDocID).collection('articles').document()
