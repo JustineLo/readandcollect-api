@@ -29,7 +29,8 @@ def add_article():
     }
     html = get_html(url, headers)
 
-    title, image = get_title_and_image(html)
+    title = get_title_and_image(html)['title']
+    image = get_title_and_image(html)['image']
 
     html = sanitize(html.article if html.article else html.body)
     html = select_content(html)
@@ -65,7 +66,12 @@ def get_title_and_image(html):
     try: 
         if(html.h1):
             title = html.h1.text
-            image = html.h1.find_next('img')
+            img_tag = html.h1.find_next('img')
+            while img_tag and not img_tag.has_attr('src'):
+                img_tag = img_tag.find_next('img')
+
+            if img_tag:
+                image = img_tag.get('src')
         elif(html.title):
             title = html.title.text
             image = html.find('img')
@@ -73,7 +79,7 @@ def get_title_and_image(html):
             title = "Untitled"
     except:
         print("title catch error")
-    return title, image
+    return {'title': title, 'image': image}
 
 def get_text(html):
     text = ""
