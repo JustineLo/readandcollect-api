@@ -65,7 +65,7 @@ def get_title_and_image(html):
     try: 
         if(html.h1):
             title = html.h1.text
-            image = html.h1.find_next_sibling('img')
+            image = html.h1.find_next('img')
         elif(html.title):
             title = html.title.text
             image = html.find('img')
