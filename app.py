@@ -67,7 +67,7 @@ def get_title_and_image(html):
         if(html.h1):
             title = html.h1.text
             img_tag = html.h1.find_next('img')
-            while img_tag and not img_tag.has_attr('src'):
+            while img_tag and not img_tag.has_attr('src') and img_tag.has_attr('alt'):
                 img_tag = img_tag.find_next('img')
 
             if img_tag:
