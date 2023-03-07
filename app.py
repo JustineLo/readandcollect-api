@@ -23,6 +23,7 @@ def add_article():
 
     userDocID = request.json.get("userDocID")
     url = request.json.get("url")
+    image = request.json.get("image")
 
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
@@ -40,6 +41,7 @@ def add_article():
     new_article = {
         'title': title,
         'url': url,
+        'image': image,
         'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'zContent': text,
         'highlights': []
