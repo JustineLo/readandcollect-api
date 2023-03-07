@@ -29,18 +29,17 @@ def add_article():
     }
     html = get_html(url, headers)
 
-    title = get_title_and_image(html)['title']
-    image = get_title_and_image(html)['image']
+    title = get_title(html)
 
     html = sanitize(html.article if html.article else html.body)
     html = select_content(html)
 
     text = get_text(html)
 
+    # define the new user data
     new_article = {
         'title': title,
         'url': url,
-        'image': image,
         'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'zContent': text,
         'highlights': []
@@ -49,6 +48,7 @@ def add_article():
     doc_ref = db.collection('users').document(userDocID).collection('articles').document()
     doc_ref.set(new_article)
 
+    # return the response from the create_user endpoint
     return jsonify(new_article), 201
 
 if __name__ == '__main__':
@@ -60,26 +60,18 @@ def get_html(url, headers):
     html = BeautifulSoup(request.content, 'html.parser')
     return html
 
-def get_title_and_image(html):
+def get_title(html):
     title = ""
-    image = ""
     try: 
         if(html.h1):
             title = html.h1.text
-            img_tag = html.find('img')
-            while img_tag and not img_tag.has_attr('src') and img_tag.has_attr('alt'):
-                img_tag = img_tag.find_next('img')
-
-            if img_tag:
-                image = img_tag.get('src')
         elif(html.title):
             title = html.title.text
-            image = html.find('img')
         else:
             title = "Untitled"
     except:
         print("title catch error")
-    return {'title': title, 'image': image}
+    return title
 
 def get_text(html):
     text = ""
@@ -126,4 +118,4 @@ def select_content(soup):
         if tag.name == 'p':
             sanitize(tag)
             tag_array.append(tag)
-    return tag_array
+    return 
