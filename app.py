@@ -1,15 +1,13 @@
-import os
 import datetime
-
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+import json
+import os
 
 import firebase_admin
-from firebase_admin import credentials, firestore
-import json
-
-from bs4 import BeautifulSoup, Comment
 import requests
+from bs4 import BeautifulSoup, Comment
+from firebase_admin import credentials, firestore
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
@@ -31,17 +29,17 @@ def add_article():
     }
     html = get_html(url, headers)
 
-    title = get_title(html)
+    title, image = get_title_and_image(html)
 
     html = sanitize(html.article if html.article else html.body)
     html = select_content(html)
 
     text = get_text(html)
 
-    # define the new user data
     new_article = {
         'title': title,
         'url': url,
+        'image': image,
         'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'zContent': text,
         'highlights': []
@@ -50,7 +48,6 @@ def add_article():
     doc_ref = db.collection('users').document(userDocID).collection('articles').document()
     doc_ref.set(new_article)
 
-    # return the response from the create_user endpoint
     return jsonify(new_article), 201
 
 if __name__ == '__main__':
@@ -62,18 +59,21 @@ def get_html(url, headers):
     html = BeautifulSoup(request.content, 'html.parser')
     return html
 
-def get_title(html):
+def get_title_and_image(html):
     title = ""
+    image = ""
     try: 
         if(html.h1):
             title = html.h1.text
+            image = html.h1.find_next_sibling('img')
         elif(html.title):
             title = html.title.text
+            image = html.find('img')
         else:
             title = "Untitled"
     except:
         print("title catch error")
-    return title
+    return title, image
 
 def get_text(html):
     text = ""
