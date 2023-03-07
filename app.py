@@ -40,6 +40,7 @@ def add_article():
     new_article = {
         'title': title,
         'url': url,
+        'image': '',
         'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'zContent': text,
         'highlights': []
