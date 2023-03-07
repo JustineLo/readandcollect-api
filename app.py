@@ -40,7 +40,6 @@ def add_article():
     new_article = {
         'title': title,
         'url': url,
-        'image': '',
         'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'zContent': text,
         'highlights': []
@@ -119,4 +118,4 @@ def select_content(soup):
         if tag.name == 'p':
             sanitize(tag)
             tag_array.append(tag)
-    return 
+    return tag_array
