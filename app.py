@@ -44,7 +44,8 @@ def add_article():
         'image': image,
         'createdAt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'zContent': text,
-        'highlights': []
+        'highlights': [],
+        'collages': []
     }
 
     doc_ref = db.collection('users').document(userDocID).collection('articles').document()
